@@ -38,8 +38,8 @@ public class BranchingUpgradesPatch {
             clz = GridCardSelectScreen.class,
             method = SpirePatch.CLASS
     )
-    public static class IsDoingBranchUpgrade {
-        public static SpireField<Boolean> isDoingBranchUpgrade = new SpireField<>(() -> false);
+    public static class isHoveringBranchUpgrade {
+        public static SpireField<Boolean> isHoveringBranchUpgrade = new SpireField<>(() -> false);
     }
 
     @SpirePatch(
@@ -58,7 +58,7 @@ public class BranchingUpgradesPatch {
                 setBranchUpgradesCard.branchUpgrade();
                 setBranchUpgradesCard.displayBranchUpgrades();
                 BranchingUpgradePreviewCardField.branchUpgradePreviewCard.set(__instance, previewCard);
-                IsDoingBranchUpgrade.isDoingBranchUpgrade.set(__instance, true);
+                isHoveringBranchUpgrade.isHoveringBranchUpgrade.set(__instance, true);
             }
         }
 
@@ -149,7 +149,7 @@ public class BranchingUpgradesPatch {
     public static class BranchUpgradeConfirm {
         public static SpireReturn Prefix(GridSelectConfirmButton __instance, SpriteBatch sb) {
             AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
-            if (!IsDoingBranchUpgrade.isDoingBranchUpgrade.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
+            if (!isHoveringBranchUpgrade.isHoveringBranchUpgrade.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -162,7 +162,7 @@ public class BranchingUpgradesPatch {
     )
     public static class CancelUpgrade {
         public static void Prefix(GridCardSelectScreen __instance) {
-            IsDoingBranchUpgrade.isDoingBranchUpgrade.set(__instance, false);
+            isHoveringBranchUpgrade.isHoveringBranchUpgrade.set(__instance, false);
         }
     }
 }
