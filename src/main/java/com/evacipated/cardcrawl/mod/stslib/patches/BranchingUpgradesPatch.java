@@ -155,4 +155,14 @@ public class BranchingUpgradesPatch {
             return SpireReturn.Continue();
         }
     }
+
+    @SpirePatch(
+            clz = GridCardSelectScreen.class,
+            method = "cancelUpgrade"
+    )
+    public static class CancelUpgrade {
+        public static void Prefix(GridCardSelectScreen __instance) {
+            IsDoingBranchUpgrade.isDoingBranchUpgrade.set(__instance, false);
+        }
+    }
 }
