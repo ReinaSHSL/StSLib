@@ -36,7 +36,7 @@ public class BranchingUpgradesPatch {
         @SpireInsertPatch(
                 locator = Locator.class
         )
-        public static SpireReturn Insert(GridCardSelectScreen __instance) {
+        public static void Insert(GridCardSelectScreen __instance) {
             AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
             if (c instanceof BranchingUpgradesCard) {
                 AbstractCard previewCard = c.makeStatEquivalentCopy();
@@ -46,7 +46,6 @@ public class BranchingUpgradesPatch {
                 setBranchUpgradesCard.displayBranchUpgrades();
                 BranchingUpgradePreviewCardField.branchUpgradePreviewCard.set(__instance, previewCard);
             }
-            return SpireReturn.Continue();
         }
 
         private static class Locator extends SpireInsertLocator
