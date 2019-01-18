@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import javassist.CtBehavior;
 
 import java.util.ArrayList;
@@ -29,6 +30,15 @@ public class BranchingUpgradesPatch {
     )
     public static class BranchingUpgradePreviewCardField {
         public static SpireField<AbstractCard> branchUpgradePreviewCard = new SpireField<>(() -> null);
+    }
+
+
+    @SpirePatch(
+            clz = GridCardSelectScreen.class,
+            method = SpirePatch.CLASS
+    )
+    public static class IsDoingBranchUpgrade {
+        public static SpireField<Boolean> isDoingBranchUpgrade = new SpireField<>(() -> false);
     }
 
     @SpirePatch(
@@ -128,4 +138,6 @@ public class BranchingUpgradesPatch {
             }
         }
     }
+
+
 }
