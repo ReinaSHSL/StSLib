@@ -30,7 +30,7 @@ public class BranchingUpgradesPatch {
 
     @SpirePatch(
             clz = GridCardSelectScreen.class,
-            method = "render"
+            method = "update"
     )
     public static class RenderBranchingUpgrade {
         @SpireInsertPatch(
