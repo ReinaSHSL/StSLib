@@ -7,6 +7,7 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
@@ -140,4 +141,17 @@ public class BranchingUpgradesPatch {
     }
 
 
+    @SpirePatch(
+            clz = GridSelectConfirmButton.class,
+            method = "render"
+    )
+    public static class BranchUpgradeConfirm {
+        public static SpireReturn Prefix(GridSelectConfirmButton __instance, SpriteBatch sb) {
+            AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
+            if (!IsDoingBranchUpgrade.isDoingBranchUpgrade.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
+                return SpireReturn.Return(null);
+            }
+            return SpireReturn.Continue();
+        }
+    }
 }
