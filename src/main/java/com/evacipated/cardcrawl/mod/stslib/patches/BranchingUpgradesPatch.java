@@ -32,7 +32,7 @@ public class BranchingUpgradesPatch {
             clz = GridCardSelectScreen.class,
             method = "update"
     )
-    public static class RenderBranchingUpgrade {
+    public static class GetBranchingUpgrade {
         @SpireInsertPatch(
                 locator = Locator.class
         )
@@ -58,4 +58,5 @@ public class BranchingUpgradesPatch {
             }
         }
     }
+
 }
