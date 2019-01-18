@@ -11,8 +11,8 @@ public interface BranchingUpgradesCard {
         if (this instanceof AbstractCard) {
             AbstractCard c = (AbstractCard) this;
             BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true);
-            c.upgraded = true;
             branchUpgrade();
+            c.upgraded = true;
         }
     }
 

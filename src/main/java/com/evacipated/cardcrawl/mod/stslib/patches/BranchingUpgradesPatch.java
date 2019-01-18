@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import javassist.CtBehavior;
@@ -42,6 +43,15 @@ public class BranchingUpgradesPatch {
         public static SpireField<Boolean> waitingForBranchUpgradeSelection = new SpireField<>(() -> false);
     }
 
+
+    @SpirePatch(
+            clz = GridCardSelectScreen.class,
+            method = SpirePatch.CLASS
+    )
+    public static class IsBranchUpgrading {
+        public static SpireField<Boolean> isBranchUpgrading = new SpireField<>(() -> false);
+    }
+
     @SpirePatch(
             clz = GridCardSelectScreen.class,
             method = "update"
@@ -55,9 +65,10 @@ public class BranchingUpgradesPatch {
             if (c instanceof BranchingUpgradesCard) {
                 AbstractCard previewCard = c.makeStatEquivalentCopy();
                 BranchingUpgradesCard setBranchUpgradesCard = (BranchingUpgradesCard) previewCard;
-                setBranchUpgradesCard.branchUpgrade();
+                setBranchUpgradesCard.setIsBranchUpgrade();
                 setBranchUpgradesCard.displayBranchUpgrades();
                 BranchingUpgradePreviewCardField.branchUpgradePreviewCard.set(__instance, previewCard);
+                WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(__instance, true);
             }
         }
 
@@ -79,7 +90,9 @@ public class BranchingUpgradesPatch {
                 rloc = 163
         )
         public static void Insert(GridCardSelectScreen __instance) {
-            BranchingUpgradePreviewCardField.branchUpgradePreviewCard.get(__instance).update();
+            if (BranchingUpgradePreviewCardField.branchUpgradePreviewCard.get(__instance) != null) {
+                BranchingUpgradePreviewCardField.branchUpgradePreviewCard.get(__instance).update();
+            }
         }
 
     }
@@ -147,7 +160,7 @@ public class BranchingUpgradesPatch {
     )
     public static class BranchUpgradeConfirm {
         public static SpireReturn Prefix(GridSelectConfirmButton __instance, SpriteBatch sb) {
-            AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
+            AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(AbstractDungeon.gridSelectScreen, GridCardSelectScreen.class, "hoveredCard");
             if (WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
                 return SpireReturn.Return(null);
             }
@@ -161,7 +174,7 @@ public class BranchingUpgradesPatch {
     )
     public static class CancelUpgrade {
         public static void Prefix(GridCardSelectScreen __instance) {
-            WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(__instance, true);
+            WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(__instance, false);
         }
     }
 
@@ -171,8 +184,29 @@ public class BranchingUpgradesPatch {
     )
     public static class SelectBranchedUpgrade {
         public static void Postfix(AbstractCard __instance) {
-            if (__instance.hb.clicked) {
-                WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, true);
+            if (__instance.hb.hovered && InputHelper.justClickedLeft) {
+                System.out.println("dab");
+                System.out.println(BranchingUpgradeField.isBranchUpgraded.get(__instance));
+                System.out.println(IsBranchUpgrading.isBranchUpgrading.get(AbstractDungeon.gridSelectScreen));
+                if (BranchingUpgradeField.isBranchUpgraded.get(__instance)) {
+                    IsBranchUpgrading.isBranchUpgrading.set(AbstractDungeon.gridSelectScreen, true);
+                }
+                WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, false);
+            }
+        }
+    }
+
+    @SpirePatch(
+            clz = GridSelectConfirmButton.class,
+            method = "update"
+    )
+    public static class DoBranchUpgrade {
+        public static void Prefix(GridSelectConfirmButton __instance) {
+            if (IsBranchUpgrading.isBranchUpgrading.get(AbstractDungeon.gridSelectScreen) && __instance.hb.hovered && InputHelper.justClickedLeft) {
+                AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(AbstractDungeon.gridSelectScreen, GridCardSelectScreen.class, "hoveredCard");
+                BranchingUpgradesCard upgradeCard = (BranchingUpgradesCard) c;
+                System.out.println("BIG DAB");
+                upgradeCard.setIsBranchUpgrade();
             }
         }
     }
