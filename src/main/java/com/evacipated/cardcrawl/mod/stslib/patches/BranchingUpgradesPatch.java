@@ -58,7 +58,6 @@ public class BranchingUpgradesPatch {
                 setBranchUpgradesCard.branchUpgrade();
                 setBranchUpgradesCard.displayBranchUpgrades();
                 BranchingUpgradePreviewCardField.branchUpgradePreviewCard.set(__instance, previewCard);
-                isHoveringBranchUpgrade.isHoveringBranchUpgrade.set(__instance, true);
             }
         }
 
@@ -165,4 +164,6 @@ public class BranchingUpgradesPatch {
             isHoveringBranchUpgrade.isHoveringBranchUpgrade.set(__instance, false);
         }
     }
+
+
 }
