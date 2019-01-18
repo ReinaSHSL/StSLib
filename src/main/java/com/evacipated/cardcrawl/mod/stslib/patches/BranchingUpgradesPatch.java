@@ -39,9 +39,12 @@ public class BranchingUpgradesPatch {
         public static SpireReturn Insert(GridCardSelectScreen __instance) {
             AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
             if (c instanceof BranchingUpgradesCard) {
-                BranchingUpgradesCard previewCard = (BranchingUpgradesCard) BranchingUpgradePreviewCardField.branchUpgradePreviewCard.get(__instance).makeStatEquivalentCopy();
-                previewCard.branchUpgrade();
-                previewCard.displayBranchUpgrades();
+                AbstractCard previewCard = c.makeStatEquivalentCopy();
+                previewCard.drawScale = 0.875F;
+                BranchingUpgradesCard setBranchUpgradesCard = (BranchingUpgradesCard) previewCard;
+                setBranchUpgradesCard.branchUpgrade();
+                setBranchUpgradesCard.displayBranchUpgrades();
+                BranchingUpgradePreviewCardField.branchUpgradePreviewCard.set(__instance, previewCard);
             }
             return SpireReturn.Continue();
         }
