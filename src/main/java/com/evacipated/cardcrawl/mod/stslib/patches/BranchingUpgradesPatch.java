@@ -148,7 +148,7 @@ public class BranchingUpgradesPatch {
     public static class BranchUpgradeConfirm {
         public static SpireReturn Prefix(GridSelectConfirmButton __instance, SpriteBatch sb) {
             AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
-            if (!WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
+            if (WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.get(AbstractDungeon.gridSelectScreen) && c instanceof BranchingUpgradesCard  ) {
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -161,9 +161,19 @@ public class BranchingUpgradesPatch {
     )
     public static class CancelUpgrade {
         public static void Prefix(GridCardSelectScreen __instance) {
-            WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(__instance, false);
+            WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(__instance, true);
         }
     }
 
-
+    @SpirePatch(
+            clz = AbstractCard.class,
+            method = "update"
+    )
+    public static class SelectBranchedUpgrade {
+        public static void Postfix(AbstractCard __instance) {
+            if (__instance.hb.clicked) {
+                WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, true);
+            }
+        }
+    }
 }
