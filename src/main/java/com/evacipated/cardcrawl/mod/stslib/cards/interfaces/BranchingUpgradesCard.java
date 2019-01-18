@@ -3,7 +3,7 @@ package com.evacipated.cardcrawl.mod.stslib.cards.interfaces;
 import com.evacipated.cardcrawl.mod.stslib.patches.BranchingUpgradesPatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 
-public interface BranchingUpgradesInterface {
+public interface BranchingUpgradesCard {
 
     void branchUpgrade();
 
