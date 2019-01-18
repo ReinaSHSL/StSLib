@@ -7,6 +7,7 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import javassist.CtBehavior;
 
@@ -42,7 +43,6 @@ public class BranchingUpgradesPatch {
             AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "hoveredCard");
             if (c instanceof BranchingUpgradesCard) {
                 AbstractCard previewCard = c.makeStatEquivalentCopy();
-                previewCard.drawScale = 0.875F;
                 BranchingUpgradesCard setBranchUpgradesCard = (BranchingUpgradesCard) previewCard;
                 setBranchUpgradesCard.branchUpgrade();
                 setBranchUpgradesCard.displayBranchUpgrades();
@@ -59,6 +59,19 @@ public class BranchingUpgradesPatch {
         }
     }
 
+    @SpirePatch(
+            clz = GridCardSelectScreen.class,
+            method = "update"
+    )
+    public static class StupidFuckingUpdateBullshitImSoMadDontChangeThisClassNameKio {
+        @SpireInsertPatch(
+                rloc = 163
+        )
+        public static void Insert(GridCardSelectScreen __instance) {
+            BranchingUpgradePreviewCardField.branchUpgradePreviewCard.get(__instance).update();
+        }
+
+    }
 
     @SpirePatch(
             clz = GridCardSelectScreen.class,
@@ -78,17 +91,19 @@ public class BranchingUpgradesPatch {
                 c.target_y = (Settings.HEIGHT / 2.0F);
                 c.render(sb);
                 c.updateHoverLogic();
+                __instance.upgradePreviewCard.drawScale = 0.9F;
                 __instance.upgradePreviewCard.current_x = (Settings.WIDTH * 0.63F);
-                __instance.upgradePreviewCard.current_y = (Settings.HEIGHT / 2.0F);
+                __instance.upgradePreviewCard.current_y = (Settings.HEIGHT * 0.75F - (50 * Settings.scale));
                 __instance.upgradePreviewCard.target_x = (Settings.WIDTH * 0.63F);
-                __instance.upgradePreviewCard.target_y = (Settings.HEIGHT / 2.0F);
+                __instance.upgradePreviewCard.target_y = (Settings.HEIGHT * 0.75F - (50 * Settings.scale));
                 __instance.upgradePreviewCard.render(sb);
                 __instance.upgradePreviewCard.updateHoverLogic();
                 __instance.upgradePreviewCard.renderCardTip(sb);
-                branchUpgradedCard.current_x = (Settings.WIDTH * 0.8F);
-                branchUpgradedCard.current_y = (Settings.HEIGHT / 2.0F);
+                branchUpgradedCard.drawScale = 0.9F;
+                branchUpgradedCard.current_x = (Settings.WIDTH * 0.63F);
+                branchUpgradedCard.current_y = (Settings.HEIGHT / 4.0F + (50 * Settings.scale));
                 branchUpgradedCard.target_x = (Settings.WIDTH * 0.63F);
-                branchUpgradedCard.target_y = (Settings.HEIGHT / 2.0F);
+                branchUpgradedCard.target_y = (Settings.HEIGHT / 4.0F + (50 * Settings.scale));
                 branchUpgradedCard.render(sb);
                 branchUpgradedCard.updateHoverLogic();
                 branchUpgradedCard.renderCardTip(sb);
@@ -98,7 +113,7 @@ public class BranchingUpgradesPatch {
                 CardGroup targetGroup = (CardGroup) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "targetGroup");
                 String tipMsg = (String) ReflectionHacks.getPrivate(__instance, GridCardSelectScreen.class, "tipMsg");
                 if ((!__instance.isJustForConfirming) || (targetGroup.size() > 5)) {
-                    com.megacrit.cardcrawl.helpers.FontHelper.renderDeckViewTip(sb, tipMsg, 96.0F * Settings.scale, Settings.CREAM_COLOR);
+                    FontHelper.renderDeckViewTip(sb, tipMsg, 96.0F * Settings.scale, Settings.CREAM_COLOR);
                 }
                 return SpireReturn.Return(null);
             }
