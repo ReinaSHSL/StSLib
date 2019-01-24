@@ -217,7 +217,6 @@ public class BranchingUpgradesPatch {
     public static class CopiesRetainBranchUpgrade {
         public static AbstractCard Postfix(AbstractCard __result, AbstractCard __instance) {
             if (__result.timesUpgraded < 0 && __result instanceof BranchingUpgradesCard) {
-                System.out.println("pls");
                 for (int i = 0; i > __result.timesUpgraded; i--) {
                     BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
                     c.setIsBranchUpgrade();
