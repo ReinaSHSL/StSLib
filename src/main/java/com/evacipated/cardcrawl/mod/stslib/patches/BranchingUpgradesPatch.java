@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -217,6 +218,21 @@ public class BranchingUpgradesPatch {
         public static void Postfix(AbstractCard __result, AbstractCard __instance) {
             if (__result.timesUpgraded < 0 && __result instanceof BranchingUpgradesCard) {
                 for (int i = 0; i > __result.timesUpgraded; i--) {
+                    BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
+                    c.setIsBranchUpgrade();
+                }
+            }
+        }
+    }
+
+    @SpirePatch(
+            clz = CardLibrary.class,
+            method = "getCopy"
+    )
+    public static class SaveBranchingUpgrades {
+        public static void Postfix(AbstractCard __result, CardLibrary __instance, String useless0, int upgradeCount, int useless1) {
+            if (upgradeCount < 0 && __result instanceof BranchingUpgradesCard) {
+                for (int i = 0; i > upgradeCount; i--) {
                     BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
                     c.setIsBranchUpgrade();
                 }
