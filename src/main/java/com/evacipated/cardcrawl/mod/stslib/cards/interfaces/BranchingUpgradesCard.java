@@ -10,13 +10,9 @@ public interface BranchingUpgradesCard {
     default void setIsBranchUpgrade() {
         if (this instanceof AbstractCard) {
             AbstractCard c = (AbstractCard) this;
-            BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true);
+            BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true); //pretend this is a variable in the class instead of a spirefield
             branchUpgrade();
             c.upgraded = true;
-            if (c.timesUpgraded > 0) {
-                c.timesUpgraded = -1;
-            }
-            c.timesUpgraded--;
         }
     }
 

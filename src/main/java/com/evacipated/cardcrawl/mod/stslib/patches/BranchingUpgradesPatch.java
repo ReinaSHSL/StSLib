@@ -215,27 +215,46 @@ public class BranchingUpgradesPatch {
             method = "makeStatEquivalentCopy"
     )
     public static class CopiesRetainBranchUpgrade {
-        public static void Postfix(AbstractCard __result, AbstractCard __instance) {
+        public static AbstractCard Postfix(AbstractCard __result, AbstractCard __instance) {
             if (__result.timesUpgraded < 0 && __result instanceof BranchingUpgradesCard) {
                 for (int i = 0; i > __result.timesUpgraded; i--) {
                     BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
                     c.setIsBranchUpgrade();
                 }
             }
+            return __result;
         }
     }
 
     @SpirePatch(
             clz = CardLibrary.class,
-            method = "getCopy"
+            method = "getCopy",
+            paramtypez = {
+                    String.class,
+                    int.class,
+                    int.class
+            }
     )
     public static class SaveBranchingUpgrades {
-        public static void Postfix(AbstractCard __result, CardLibrary __instance, String useless0, int upgradeCount, int useless1) {
+        public static AbstractCard Postfix(AbstractCard __result, String useless0, int upgradeCount, int useless1) {
             if (upgradeCount < 0 && __result instanceof BranchingUpgradesCard) {
                 for (int i = 0; i > upgradeCount; i--) {
                     BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
                     c.setIsBranchUpgrade();
                 }
+            }
+            return __result;
+        }
+    }
+
+    @SpirePatch(
+        clz = AbstractCard.class,
+        method = "upgradeName"
+    )
+    public static class AvoidSomeFractalsOrSomethingIGuess {
+        public static void Postfix(AbstractCard __instance) {
+            if (__instance instanceof BranchingUpgradesCard) {
+                __instance.timesUpgraded -= 2;
             }
         }
     }
