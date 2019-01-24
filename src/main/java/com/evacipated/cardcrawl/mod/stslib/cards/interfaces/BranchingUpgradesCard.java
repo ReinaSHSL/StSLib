@@ -13,6 +13,10 @@ public interface BranchingUpgradesCard {
             BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true);
             branchUpgrade();
             c.upgraded = true;
+            if (c.timesUpgraded > 0) {
+                c.timesUpgraded = -1;
+            }
+            c.timesUpgraded--;
         }
     }
 
