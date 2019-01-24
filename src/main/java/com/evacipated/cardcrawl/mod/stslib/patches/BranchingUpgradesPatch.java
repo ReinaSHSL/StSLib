@@ -186,8 +186,6 @@ public class BranchingUpgradesPatch {
         public static void Postfix(AbstractCard __instance) {
             if (__instance.hb.hovered && InputHelper.justClickedLeft) {
                 System.out.println("dab");
-                System.out.println(BranchingUpgradeField.isBranchUpgraded.get(__instance));
-                System.out.println(IsBranchUpgrading.isBranchUpgrading.get(AbstractDungeon.gridSelectScreen));
                 if (BranchingUpgradeField.isBranchUpgraded.get(__instance)) {
                     IsBranchUpgrading.isBranchUpgrading.set(AbstractDungeon.gridSelectScreen, true);
                 }
