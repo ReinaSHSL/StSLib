@@ -7,6 +7,8 @@ public interface BranchingUpgradesCard {
 
     void branchUpgrade();
 
+    void setBranchDescription();
+
     default void setIsBranchUpgrade() {
         if (this instanceof AbstractCard) {
             AbstractCard c = (AbstractCard) this;
@@ -36,9 +38,4 @@ public interface BranchingUpgradesCard {
             }
         }
     }
-
-    default boolean getIsBranchUpgraded() {
-        return BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.get(this);
-    }
-
 }
