@@ -208,4 +208,19 @@ public class BranchingUpgradesPatch {
             }
         }
     }
+
+    @SpirePatch(
+            clz = AbstractCard.class,
+            method = "makeStatEquivalentCopy"
+    )
+    public static class CopiesRetainBranchUpgrade {
+        public static void Postfix(AbstractCard __result, AbstractCard __instance) {
+            if (__result.timesUpgraded < 0 && __result instanceof BranchingUpgradesCard) {
+                for (int i = 0; i > __result.timesUpgraded; i--) {
+                    BranchingUpgradesCard c = (BranchingUpgradesCard) __result;
+                    c.setIsBranchUpgrade();
+                }
+            }
+        }
+    }
 }
