@@ -186,7 +186,6 @@ public class BranchingUpgradesPatch {
     public static class SelectBranchedUpgrade {
         public static void Postfix(AbstractCard __instance) {
             if (__instance.hb.hovered && InputHelper.justClickedLeft) {
-                System.out.println("dab");
                 if (BranchingUpgradeField.isBranchUpgraded.get(__instance)) {
                     IsBranchUpgrading.isBranchUpgrading.set(AbstractDungeon.gridSelectScreen, true);
                 }
@@ -204,7 +203,6 @@ public class BranchingUpgradesPatch {
             if (IsBranchUpgrading.isBranchUpgrading.get(AbstractDungeon.gridSelectScreen) && __instance.hb.hovered && InputHelper.justClickedLeft) {
                 AbstractCard c = (AbstractCard) ReflectionHacks.getPrivate(AbstractDungeon.gridSelectScreen, GridCardSelectScreen.class, "hoveredCard");
                 BranchingUpgradesCard upgradeCard = (BranchingUpgradesCard) c;
-                System.out.println("BIG DAB");
                 upgradeCard.setIsBranchUpgrade();
             }
         }
