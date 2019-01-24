@@ -10,7 +10,7 @@ public interface BranchingUpgradesCard {
     default void setIsBranchUpgrade() {
         if (this instanceof AbstractCard) {
             AbstractCard c = (AbstractCard) this;
-            BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true); //pretend this is a variable in the class instead of a spirefield
+            BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.set(c, true);
             branchUpgrade();
             c.upgraded = true;
         }
@@ -36,4 +36,9 @@ public interface BranchingUpgradesCard {
             }
         }
     }
+
+    default boolean getIsBranchUpgraded() {
+        return BranchingUpgradesPatch.BranchingUpgradeField.isBranchUpgraded.get(this);
+    }
+
 }
