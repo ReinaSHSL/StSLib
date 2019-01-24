@@ -189,6 +189,7 @@ public class BranchingUpgradesPatch {
                 if (BranchingUpgradeField.isBranchUpgraded.get(__instance)) {
                     IsBranchUpgrading.isBranchUpgrading.set(AbstractDungeon.gridSelectScreen, true);
                 }
+                __instance.beginGlowing();
                 WaitingForBranchUpgradeSelection.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, false);
             }
         }
